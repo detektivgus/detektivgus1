@@ -1,0 +1,24 @@
+{
+  "name": "Музыкальный плеер",
+  "short_name": "Music Player",
+  "description": "Современный музыкальный плеер с поддержкой фонового режима",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik05NiA0OEM3My45MDg2IDQ4IDU2IDY1LjkwODYgNTYgODhWMTA0QzU2IDEyNi4wOTEgNzMuOTA4NiAxNDQgOTYgMTQ0QzExOC4wOTEgMTQ0IDEzNiAxMjYuMDkxIDEzNiAxMDRWODhDMTM2IDY1LjkwODYgMTE4LjA5MSA0OCA5NiA0OFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTk2IDY0QzgyLjc0NTIgNjQgNzIgNzQuNzQ1MiA3MiA4OFYxMDRDNzIgMTE3LjI1NSA4Mi43NDUyIDEyOCA5NiAxMjhDMTA5LjI1NSAxMjggMTIwIDExNy4yNTUgMTIwIDEwNFY4OEMxMjAgNzQuNzQ1MiAxMDkuMjU1IDY0IDk2IDY0WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0yNTYgMTI4QzE5Ny42NTcgMTI4IDE1MiAxNzMuNjU3IDE1MiAyMzJWMjgwQzE1MiAzMzguMzQzIDE5Ny42NTcgMzg0IDI1NiAzODRDMzE0LjM0MyAzODQgMzYwIDMzOC4zNDMgMzYwIDI4MFYyMzJDMzYwIDE3My42NTcgMzE0LjM0MyAxMjggMjU2IDEyOFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTI1NiAxNzZDMjIwLjY1NCAxNzYgMTkyIDE5OC42NTQgMTkyIDIzMlYyODBDMTkyIDMxMy4zNDYgMjIwLjY1NCAzNDQgMjU2IDM0NEMyOTEuMzQ2IDM0NCAzMjAgMzEzLjM0NiAzMjAgMjgwVjIzMkMzMjAgMTk4LjY1NCAyOTEuMzQ2IDE3NiAyNTYgMTc2WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["music", "entertainment"],
+  "lang": "ru"
+}

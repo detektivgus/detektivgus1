@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Музыкальный Плеер</title>
+    <title>Музыкальный плеер</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
     <div class="player-container">
@@ -22,28 +24,70 @@
                 </div>
             </div>
 
-            <!-- Боковая панель с треками -->
+            <!-- Боковая панель -->
             <div class="track-sidebar">
                 <div class="sidebar-header">
                     <div class="sidebar-controls">
-                        <button class="sidebar-btn active" id="tracksTab">
+                        <button id="tracksTab" class="sidebar-btn active">
                             <i class="fas fa-music"></i> Треки
                         </button>
-                        <button class="sidebar-btn" id="addMusicBtn">
+                        <button id="playlistsTab" class="sidebar-btn">
+                            <i class="fas fa-list"></i> Плейлисты
+                        </button>
+                        <button id="addMusicBtn" class="sidebar-btn">
                             <i class="fas fa-plus"></i> Добавить
                         </button>
-                        <button class="sidebar-btn" id="exportBtn">
-                            <i class="fas fa-download"></i> Экспорт
+                        <button id="addFolderBtn" class="sidebar-btn" title="Добавить папку">
+                            <i class="fas fa-folder-plus"></i>
                         </button>
-                        <button class="sidebar-btn" id="importBtn">
-                            <i class="fas fa-upload"></i> Импорт
+                        <button id="resetDataBtn" class="sidebar-btn reset-btn" title="Сбросить все данные">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
-                <div class="track-list" id="trackList">
-                    <div class="empty-state">
-                        <i class="fas fa-music"></i>
-                        <p>Перетащите музыкальные файлы сюда<br>или нажмите "Добавить"</p>
+
+                <!-- Вкладка треков -->
+                <div id="tracksView" class="view-content">
+                    <!-- Зона перетаскивания -->
+                    <div id="dropZone" class="drop-zone">
+                        <div class="drop-zone-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Перетащите файлы или папки сюда</h3>
+                            <p>Поддерживаются: MP3, WAV, FLAC, OGG, M4A, WEBM</p>
+                            <div class="drop-zone-buttons">
+                                <button id="selectFilesBtn" class="drop-zone-btn">
+                                    <i class="fas fa-file-audio"></i>
+                                    Выбрать файлы
+                                </button>
+                                <button id="selectFolderBtn" class="drop-zone-btn">
+                                    <i class="fas fa-folder"></i>
+                                    Выбрать папку
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="trackList" class="track-list"></div>
+                </div>
+
+                <!-- Вкладка плейлистов -->
+                <div id="playlistsView" class="view-content" style="display: none;">
+                    <div class="playlists-header">
+                        <button id="createPlaylistBtn" class="create-playlist-btn">
+                            <i class="fas fa-plus"></i> Создать плейлист
+                        </button>
+                    </div>
+                    <div id="playlistsList" class="playlists-list"></div>
+                    <div id="playlistTracks" class="playlist-tracks" style="display: none;">
+                        <div class="playlist-tracks-header">
+                            <button id="backToPlaylistsBtn" class="back-btn">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h3 id="currentPlaylistName">Плейлист</h3>
+                            <button id="addToPlaylistBtn" class="add-to-playlist-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="playlistTracksList" class="track-list"></div>
                     </div>
                 </div>
             </div>
@@ -52,37 +96,37 @@
         <!-- Панель управления -->
         <div class="player-controls">
             <div class="current-track-info">
-                <div class="track-cover" id="currentCover">
+                <div id="currentCover" class="track-cover">
                     <i class="fas fa-music"></i>
                 </div>
                 <div class="track-details">
-                    <div class="track-title" id="currentTitle">Название трека</div>
-                    <div class="track-artist" id="currentArtist">Исполнитель</div>
+                    <div id="currentTitle" class="track-title">Не выбран</div>
+                    <div id="currentArtist" class="track-artist">трек</div>
                 </div>
             </div>
 
             <div class="playback-controls">
-                <button class="control-btn" id="shuffleBtn">
+                <button id="shuffleBtn" class="control-btn">
                     <i class="fas fa-random"></i>
                 </button>
-                <button class="control-btn" id="prevBtn">
+                <button id="prevBtn" class="control-btn">
                     <i class="fas fa-step-backward"></i>
                 </button>
-                <button class="control-btn play-btn" id="playBtn">
+                <button id="playBtn" class="control-btn play-btn">
                     <i class="fas fa-play"></i>
                 </button>
-                <button class="control-btn" id="nextBtn">
+                <button id="nextBtn" class="control-btn">
                     <i class="fas fa-step-forward"></i>
                 </button>
-                <button class="control-btn" id="repeatBtn">
+                <button id="repeatBtn" class="control-btn">
                     <i class="fas fa-repeat"></i>
                 </button>
             </div>
 
             <div class="progress-section">
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                    <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0">
+                    <div id="progressFill" class="progress-fill"></div>
+                    <input type="range" id="progressSlider" class="progress-slider" min="0" max="100" value="0">
                 </div>
                 <div class="time-display">
                     <span id="currentTime">0:00</span>
@@ -91,27 +135,42 @@
             </div>
 
             <div class="volume-controls">
-                <button class="control-btn" id="volumeBtn">
+                <button id="volumeBtn" class="control-btn">
                     <i class="fas fa-volume-up"></i>
                 </button>
-                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="70">
             </div>
         </div>
     </div>
 
-    <!-- Модальное окно редактирования трека -->
-    <div class="modal" id="editTrackModal">
+    <!-- Прогресс загрузки -->
+    <div id="uploadProgress" class="upload-progress">
+        <div class="upload-progress-content">
+            <h3>Загрузка файлов</h3>
+            <div class="progress-bar-container">
+                <div id="uploadProgressBar" class="upload-progress-bar"></div>
+            </div>
+            <div id="uploadStatus" class="upload-status">Обработка файлов...</div>
+        </div>
+    </div>
+
+    <!-- Модальные окна (остальные остаются без изменений) -->
+    <div id="editTrackModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Редактировать трек</h3>
-                <button class="modal-close" id="closeEditModal">&times;</button>
+                <button id="closeEditModal" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="edit-cover-section">
-                    <div class="cover-preview" id="coverPreview">
+                    <div id="coverPreview" class="cover-preview">
                         <i class="fas fa-music"></i>
                     </div>
-                    <button class="btn-change-cover" id="changeCoverBtn">Изменить обложку</button>
+                    <button id="changeCoverBtn" class="btn-change-cover">
+                        Изменить обложку
+                    </button>
                 </div>
                 <div class="edit-fields">
                     <input type="text" id="editTitle" placeholder="Название трека">
@@ -119,19 +178,89 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" id="cancelEditBtn">Отмена</button>
-                <button class="btn-save" id="saveEditBtn">Сохранить</button>
+                <button id="cancelEditBtn" class="btn-cancel">Отмена</button>
+                <button id="saveEditBtn" class="btn-save">Сохранить</button>
             </div>
         </div>
     </div>
 
-    <!-- Скрытые файловые инпуты -->
+    <!-- Остальные модальные окна... -->
+    <div id="createPlaylistModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Создать плейлист</h3>
+                <button id="closeCreatePlaylistModal" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-fields">
+                    <input type="text" id="playlistName" placeholder="Название плейлиста">
+                    <textarea id="playlistDescription" placeholder="Описание (необязательно)" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelCreatePlaylistBtn" class="btn-cancel">Отмена</button>
+                <button id="saveCreatePlaylistBtn" class="btn-save">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addToPlaylistModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Добавить треки в плейлист</h3>
+                <button id="closeAddToPlaylistModal" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="availableTracksList" class="available-tracks-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelAddToPlaylistBtn" class="btn-cancel">Отмена</button>
+                <button id="saveAddToPlaylistBtn" class="btn-save">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resetConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Подтверждение сброса</h3>
+                <button id="closeResetConfirmModal" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить все треки, плейлисты и данные?</p>
+                <p><strong>Это действие нельзя отменить!</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelResetBtn" class="btn-cancel">Отмена</button>
+                <button id="confirmResetBtn" class="btn-delete">Удалить все</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрытые input элементы -->
     <input type="file" id="musicFileInput" multiple accept="audio/*" style="display: none;">
+    <input type="file" id="folderInput" webkitdirectory multiple style="display: none;">
     <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
-    <input type="file" id="importFileInput" accept=".json" style="display: none;">
 
     <!-- Аудио элемент -->
-    <audio id="audioPlayer" preload="metadata"></audio>
+    <audio id="audioPlayer"></audio>
+
+    <!-- Уведомление о фоновом режиме -->
+    <div id="backgroundNotification" class="background-notification">
+        <div class="notification-content">
+            <i class="fas fa-music"></i>
+            <span>Плеер работает в фоновом режиме</span>
+            <button id="closeNotification" class="close-notification">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
