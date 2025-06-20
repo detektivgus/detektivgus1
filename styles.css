@@ -934,3 +934,175 @@ body {
     flex-direction: column;
   }
 }
+
+/* Улучшения для мобильных устройств */
+@media (max-width: 768px) {
+  /* Предотвращаем зум при фокусе на input */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* Улучшаем touch targets */
+  .control-btn,
+  .sidebar-btn,
+  .track-action-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Улучшаем прокрутку на мобильных */
+  .track-list,
+  .playlists-list {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Предотвращаем выделение текста при касании */
+  .track-item,
+  .playlist-item,
+  .control-btn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Улучшаем видимость в ландшафтном режиме */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .track-title-large {
+      font-size: 1.5rem;
+    }
+
+    .track-artist-large {
+      font-size: 1rem;
+    }
+
+    .player-controls {
+      padding: 0.5rem 1rem;
+      height: 60px;
+    }
+  }
+}
+
+/* Стили для PWA */
+@media (display-mode: standalone) {
+  body {
+    /* Учитываем safe area для устройств с вырезом */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .player-container {
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  }
+}
+
+/* Стили для темной темы системы */
+@media (prefers-color-scheme: dark) {
+  /* Уже используем темную тему по умолчанию */
+}
+
+/* Стили для уменьшенной анимации */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Улучшения для высокой плотности пикселей */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .track-cover img,
+  .cover-preview img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Стили для устройств с hover */
+@media (hover: hover) {
+  .track-item:hover .track-actions {
+    opacity: 1;
+  }
+}
+
+/* Стили для устройств без hover (сенсорные) */
+@media (hover: none) {
+  .track-actions {
+    opacity: 1;
+  }
+
+  .track-item:active {
+    background: #2a2a2a;
+  }
+
+  .control-btn:active {
+    background: #333333;
+    transform: scale(0.95);
+  }
+}
+
+/* Индикатор установки PWA */
+.install-prompt {
+  position: fixed;
+  bottom: 100px;
+  left: 1rem;
+  right: 1rem;
+  background: #1a1a1a;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 1rem;
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.install-prompt.show {
+  display: flex;
+}
+
+.install-prompt-text {
+  flex: 1;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.install-prompt-button {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.install-prompt-button:hover {
+  background: #cccccc;
+}
+
+.install-prompt-close {
+  background: none;
+  border: none;
+  color: #888888;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.install-prompt-close:hover {
+  background: #333333;
+  color: #ffffff;
+}

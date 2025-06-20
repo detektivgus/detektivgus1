@@ -549,6 +549,12 @@ class MusicPlayer {
       this.playBtn.innerHTML = '<i class="fas fa-pause"></i>'
       this.updateCurrentTrackInfo()
 
+      // Запрашиваем аудио фокус на мобильных устройствах
+      this.requestAudioFocus()
+
+      // Предотвращаем засыпание экрана
+      this.requestWakeLock()
+
       // Обновляем мини-плеер и Media Session
       if (this.isBackground) {
         this.updateMiniPlayer()
@@ -565,6 +571,15 @@ class MusicPlayer {
     this.audio.pause()
     this.isPlaying = false
     this.playBtn.innerHTML = '<i class="fas fa-play"></i>'
+
+    // Освобождаем аудио фокус
+    this.releaseAudioFocus()
+
+    // Освобождаем wake lock если не в фоновом режиме
+    if (!this.isBackground && this.wakeLock) {
+      this.wakeLock.release()
+      this.wakeLock = null
+    }
 
     // Обновляем мини-плеер
     if (this.isBackground) {
@@ -659,14 +674,15 @@ class MusicPlayer {
       this.currentTime.textContent = this.formatTime(this.audio.currentTime)
     }
 
-    // Обновляем позицию в Media Session
-    if (this.isBackground && this.audio.duration) {
+    // Обновляем позицию в Media Session чаще для лучшей синхронизации
+    if (this.audio.duration && (this.isBackground || document.hidden)) {
       this.sendMessageToServiceWorker({
         type: "PLAYBACK_STATE_CHANGED",
         data: {
           isPlaying: this.isPlaying,
           position: this.audio.currentTime,
           duration: this.audio.duration,
+          playbackRate: this.audio.playbackRate || 1.0
         },
       })
     }
@@ -1145,27 +1161,50 @@ class MusicPlayer {
         const registration = await navigator.serviceWorker.register("/sw.js")
         console.log("Service Worker зарегистрирован:", registration)
 
+        // Ждем активации Service Worker
+        await navigator.serviceWorker.ready
+      
+        // Инициализируем Media Session
+        this.sendMessageToServiceWorker({ type: "INIT_MEDIA_SESSION" })
+
         // Запрашиваем разрешение на уведомления
         if ("Notification" in window && Notification.permission === "default") {
-          await Notification.requestPermission()
+          const permission = await Notification.requestPermission()
+          console.log("Разрешение на уведомления:", permission)
         }
-      } catch (error) {
-        console.error("Ошибка регистрации Service Worker:", error)
-      }
+
+        // Обработка установки PWA
+        this.handlePWAInstall()
+      
+    } catch (error) {
+      console.error("Ошибка регистрации Service Worker:", error)
     }
   }
 
   // Обработка изменения видимости страницы
-  handleVisibilityChange() {
-    if (document.hidden && this.isPlaying) {
-      this.enterBackgroundMode()
-    } else if (!document.hidden && this.isBackground) {
-      this.exitBackgroundMode()
+  handleVisibilityChange() 
+    if (document.hidden) {
+      if (this.isPlaying) {
+        console.log('Переход в фоновый режим')
+        this.enterBackgroundMode()
+      
+        // Отправляем keep-alive сообщение
+        this.sendKeepAliveMessage()
+      }
+    } else {
+      if (this.isBackground) {
+        console.log('Возврат из фонового режима')
+        this.exitBackgroundMode()
+      }
+    
+      // Возобновляем аудио контекст если нужно
+      if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume()
+      }
     }
-  }
 
   // Вход в фоновый режим
-  async enterBackgroundMode() {
+  async enterBackgroundMode() 
     this.isBackground = true
 
     // Показываем уведомление
@@ -1195,10 +1234,9 @@ class MusicPlayer {
         duration: this.audio.duration,
       },
     })
-  }
 
   // Выход из фонового режима
-  exitBackgroundMode() {
+  exitBackgroundMode() 
     this.isBackground = false
 
     // Скрываем уведомление и мини-плеер
@@ -1210,10 +1248,9 @@ class MusicPlayer {
       this.wakeLock.release()
       this.wakeLock = null
     }
-  }
 
   // Показ уведомления о фоновом режиме
-  showBackgroundNotification() {
+  showBackgroundNotification() 
     if (this.backgroundNotification) {
       this.backgroundNotification.classList.add("show")
 
@@ -1222,14 +1259,12 @@ class MusicPlayer {
         this.hideBackgroundNotification()
       }, 5000)
     }
-  }
 
   // Скрытие уведомления
-  hideBackgroundNotification() {
+  hideBackgroundNotification() 
     if (this.backgroundNotification) {
       this.backgroundNotification.classList.remove("show")
     }
-  }
 
   // Создание мини-плеера
   createMiniPlayer() {
@@ -1237,7 +1272,7 @@ class MusicPlayer {
 
     this.miniPlayer = document.createElement("div")
     this.miniPlayer.className = "mini-player show"
-
+\
     const currentTrack = this.getCurrentTrackList()[this.currentTrackIndex]
     if (!currentTrack) return
 
@@ -1254,7 +1289,7 @@ class MusicPlayer {
           <i class="fas fa-step-backward"></i>
         </button>
         <button class="control-btn play-btn mini-play-btn">
-          <i class="fas ${this.isPlaying ? "fa-pause" : "fa-play"}"></i>
+          <i class="fas ${this.isPlaying ? "fa-pause" : "fa-play\"}\"></i>\
         </button>
         <button class="control-btn mini-next-btn">
           <i class="fas fa-step-forward"></i>
@@ -1275,14 +1310,13 @@ class MusicPlayer {
   }
 
   // Удаление мини-плеера
-  removeMiniPlayer() {
+  removeMiniPlayer() 
     if (this.miniPlayer) {
       this.miniPlayer.remove()
       this.miniPlayer = null
     }
-  }
 
-  // Обновление мини-плеера
+  // Обновление мини-плеера\
   updateMiniPlayer() {
     if (!this.miniPlayer) return
 
@@ -1291,7 +1325,7 @@ class MusicPlayer {
 
     const coverElement = this.miniPlayer.querySelector(".track-cover")
     const titleElement = this.miniPlayer.querySelector(".track-title")
-    const artistElement = this.miniPlayer.querySelector(".track-artist")
+    const artistElement = this.miniPlayer.querySelector(".track-artist")\
     const playButton = this.miniPlayer.querySelector(".mini-play-btn")
 
     if (currentTrack.cover) {
@@ -1301,63 +1335,18 @@ class MusicPlayer {
     }
 
     titleElement.textContent = currentTrack.title
-    artistElement.textContent = currentTrack.artist
+    artistElement.textContent = currentTrack.artist\
     playButton.innerHTML = `<i class="fas ${this.isPlaying ? "fa-pause" : "fa-play"}"></i>`
   }
 
-  // Обновление Media Session
-  updateMediaSession() {
-    const currentTrack = this.getCurrentTrackList()[this.currentTrackIndex]
-    if (!currentTrack) return
-
-    const trackData = {
-      title: currentTrack.title,
-      artist: currentTrack.artist,
-      album: "Мой плейлист",
-      artwork: currentTrack.cover,
-    }
-
-    this.sendMessageToServiceWorker({
-      type: "TRACK_CHANGED",
-      data: trackData,
-    })
-  }
-
   // Отправка сообщения Service Worker
-  sendMessageToServiceWorker(message) {
+  sendMessageToServiceWorker(message) \
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage(message)
     }
-  }
-
-  // Обработка сообщений от Service Worker
-  handleServiceWorkerMessage(event) {
-    const { type, data } = event.data
-
-    switch (type) {
-      case "PLAY":
-        if (!this.isPlaying) this.play()
-        break
-      case "PAUSE":
-        if (this.isPlaying) this.pause()
-        break
-      case "PREVIOUS":
-        this.previousTrack()
-        break
-      case "NEXT":
-        this.nextTrack()
-        break
-      case "SEEK":
-        this.audio.currentTime += data.offset
-        break
-      case "SEEK_TO":
-        this.audio.currentTime = data.time
-        break
-    }
-  }
 
   // Показ уведомления о треке
-  showTrackNotification(track) {
+  showTrackNotification(track) 
     if ("Notification" in window && Notification.permission === "granted" && this.isBackground) {
       const notification = new Notification(`Сейчас играет: ${track.title}`, {
         body: track.artist,
@@ -1376,10 +1365,9 @@ class MusicPlayer {
         notification.close()
       }
     }
-  }
 
-  async handleFolderSelect(e) {
-    const files = Array.from(e.target.files)
+  async handleFolderSelect(e) {\
+    const files = Array.from(e.target.files)\
     const audioFiles = files.filter((file) => file.type.startsWith("audio/"))
 
     if (audioFiles.length > 0) {
@@ -1413,13 +1401,13 @@ class MusicPlayer {
       await this.processAudioFilesWithProgress(files)
     }
   }
-
+\
   async readDirectory(directoryEntry, files) {
     const reader = directoryEntry.createReader()
 
     return new Promise((resolve) => {
-      const readEntries = async () => {
-        reader.readEntries(async (entries) => {
+      const readEntries = async () => {\
+        reader.readEntries(async (entries) => 
           if (entries.length === 0) {
             resolve()
             return
@@ -1436,33 +1424,31 @@ class MusicPlayer {
             }
           }
 
-          readEntries()
-        })
+          readEntries())
       }
 
       readEntries()
     })
   }
 
-  getFileFromEntry(fileEntry) {
+  getFileFromEntry(fileEntry) 
     return new Promise((resolve) => {
       fileEntry.file(resolve)
     })
-  }
 
-  async processAudioFilesWithProgress(files) {
+  async processAudioFilesWithProgress(files) 
     if (files.length === 0) return
-
+\
     this.showUploadProgress()
-
+\
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       const progress = ((i + 1) / files.length) * 100
-
-      this.updateUploadProgress(progress, `Обработка ${i + 1} из ${files.length}: ${file.name}`)
+\
+      this.updateUploadProgress(progress, `Обработка $i + 1из $files.length: $file.name`)
 
       try {
-        const audioId = await this.saveFileToIndexedDB(file, "audioFiles")
+        const audioId = await this.saveFileToIndexedDB(file, "audioFiles")\
         const url = await this.getFileFromIndexedDB(audioId, "audioFiles")
 
         const track = {
@@ -1486,7 +1472,7 @@ class MusicPlayer {
           this.saveData()
         })
       } catch (error) {
-        console.error("Ошибка при добавлении файла:", file.name, error)
+        console.error(\"Ошибка при добавлении файла:", file.name, error)
       }
     }
 
@@ -1500,10 +1486,10 @@ class MusicPlayer {
     this.uploadProgress.classList.add("show")
   }
 
-  hideUploadProgress() {
+  hideUploadProgress() {\
     this.uploadProgress.classList.remove("show")
   }
-
+\
   updateUploadProgress(percent, status) {
     this.uploadProgressBar.style.width = percent + "%"
     this.uploadStatus.textContent = status
@@ -1514,6 +1500,160 @@ class MusicPlayer {
       this.dropZone.classList.add("has-tracks")
     } else {
       this.dropZone.classList.remove("has-tracks")
+    }
+  }
+
+  // Обработка установки PWA
+  handlePWAInstall() {
+    let deferredPrompt = null
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('PWA может быть установлено')
+      e.preventDefault()
+      deferredPrompt = e
+    
+      // Показываем кнопку установки (можно добавить в интерфейс)
+      this.showInstallButton(deferredPrompt)
+    })
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA установлено')
+      deferredPrompt = null
+    })
+  }
+
+  // Показ кнопки установки PWA
+  showInstallButton(deferredPrompt) {
+    // Можно добавить кнопку в интерфейс
+    console.log('Приложение можно установить')
+  }
+
+  // Запрос аудио фокуса
+  async requestAudioFocus() {
+    try {
+      if ('mediaSession' in navigator) {
+        // Устанавливаем тип аудио сессии
+        if ('setMicrophoneActive' in navigator.mediaSession) {
+          navigator.mediaSession.setMicrophoneActive(false)
+        }
+      }
+\
+      // Для Android - запрашиваем аудио фокус через Web Audio API\
+      if (this.audioContext && this.audioContext.state === 'suspended') {\
+        await this.audioContext.resume()
+      }\
+    } catch (error) {
+      console.log('Ошибка запроса аудио фокуса:', error)
+    }
+  }
+
+  // Освобождение аудио фокуса
+  releaseAudioFocus() {
+    try {
+      if (this.audioContext && this.audioContext.state === 'running') {\
+        // Не приостанавливаем контекст, чтобы не прерывать воспроизведение
+        console.log('Аудио фокус освобожден')
+      }
+    } catch (error) {
+      console.log('Ошибка освобождения аудио фокуса:', error)
+    }
+  }
+
+  // Запрос Wake Lock
+  async requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator && !this.wakeLock) {
+        this.wakeLock = await navigator.wakeLock.request('screen')
+        console.log('Wake Lock активирован')
+      
+        this.wakeLock.addEventListener('release', () => {
+          console.log('Wake Lock освобожден')
+        })
+      }
+    } catch (error) {
+      console.log('Wake Lock не поддерживается или ошибка:', error)
+    }
+  }
+
+  // Отправка keep-alive сообщения
+  sendKeepAliveMessage() {
+    this.sendMessageToServiceWorker({ type: "KEEP_ALIVE" })
+  
+    // Повторяем каждые 25 секунд в фоновом режиме
+    if (this.isBackground) {
+      setTimeout(() => {
+        if (this.isBackground) {
+          this.sendKeepAliveMessage()
+        }
+      }, 25000)
+    }
+  }
+
+  // Улучшенное обновление Media Session
+  updateMediaSession() {
+    const currentTrack = this.getCurrentTrackList()[this.currentTrackIndex]
+    if (!currentTrack) return
+
+    const trackData = {
+      title: currentTrack.title,
+      artist: currentTrack.artist,
+      album: this.currentPlaylist ? this.currentPlaylist.name : "Мой плейлист",
+      artwork: currentTrack.cover,
+    }
+
+    console.log('Обновление Media Session:', trackData.title)
+
+    this.sendMessageToServiceWorker({
+      type: "TRACK_CHANGED",
+      data: trackData,
+    })
+
+    // Также обновляем состояние воспроизведения
+    this.sendMessageToServiceWorker({
+      type: "PLAYBACK_STATE_CHANGED",
+      data: {
+        isPlaying: this.isPlaying,
+        position: this.audio.currentTime || 0,
+        duration: this.audio.duration || 0,
+      },
+    })
+  }
+
+  // Обработка сообщений от Service Worker
+  handleServiceWorkerMessage(event) {
+    const { type, data } = event.data
+    console.log('Получено сообщение от Service Worker:', type)
+
+    switch (type) {
+      case "PLAY":
+        if (!this.isPlaying) this.play()
+        break
+      case "PAUSE":
+        if (this.isPlaying) this.pause()
+        break
+      case "STOP":
+        this.pause()
+        this.audio.currentTime = 0
+        break
+      case "PREVIOUS":
+        this.previousTrack()
+        break
+      case "NEXT":
+        this.nextTrack()
+        break
+      case "SEEK":
+        if (this.audio.duration) {
+          this.audio.currentTime = Math.max(0, Math.min(
+            this.audio.currentTime + data.offset,
+            this.audio.duration
+          ))
+        }
+        break
+      case "SEEK_TO":
+        if (this.audio.duration) {
+          this.audio.currentTime = Math.max(0, Math.min(data.time, this.audio.duration))
+        }
+        break
     }
   }
 }
