@@ -4,31 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Музыкальный плеер</title>
-    <!-- Мобильные мета-теги -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Music Player">
-    <meta name="application-name" content="Music Player">
-    <meta name="msapplication-TileColor" content="#000000">
-    <meta name="msapplication-config" content="browserconfig.xml">
-
-    <!-- Предзагрузка критических ресурсов -->
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.js" as="script">
-
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik05MCA0NUM2OS4zNTY0IDQ1IDUyLjUgNjEuODU2NCA1Mi41IDgyLjVWOTcuNUM1Mi41IDExOC4xNDQgNjkuMzU2NCAxMzUgOTAgMTM1QzExMC42NDQgMTM1IDEyNy41IDExOC4xNDQgMTI3LjUgOTcuNVY4Mi41QzEyNy41IDYxLjg1NjQgMTEwLjY0NCA0NSA5MCA0NVoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTkwIDYwQzc3LjU3MzYgNjAgNjcuNSA3MC4wNzM2IDY3LjUgODIuNVY5Ny41QzY3LjUgMTA5LjkyNiA3Ny41NzM2IDEyMCA5MCAxMjBDMTAyLjQyNiAxMjAgMTEyLjUgMTA5LjkyNiAxMTIuNSA5Ny41VjgyLjVDMTEyLjUgNzAuMDczNiAxMDIuNDI2IDYwIDkwIDYwWiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K">
-
-    <!-- Дополнительные мета-теги для SEO и социальных сетей -->
-    <meta property="og:title" content="Музыкальный плеер">
-    <meta property="og:description" content="Современный музыкальный плеер с поддержкой фонового режима">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0yNTYgMTI4QzE5Ny42NTcgMTI4IDE1MiAxNzMuNjU3IDE1MiAyMzJWMjgwQzE1MiAzMzguMzQzIDE5Ny42NTcgMzg0IDI1NiAzODRDMzE0LjM0MyAzODQgMzYwIDMzOC4zNDMgMzYwIDI4MFYyMzJDMzYwIDE3My42NTcgMzE0LjM0MyAxMjggMjU2IDEyOFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTI1NiAxNzZDMjIwLjY1NCAxNzYgMTkyIDE5OC42NTQgMTkyIDIzMlYyODBDMTkyIDMxMy4zNDYgMjIwLjY1NCAzNDQgMjU2IDM0NEMyOTEuMzQ2IDM0NCAzMjAgMzEzLjM0NiAzMjAgMjgwVjIzMkMzMjAgMTk4LjY1NCAyOTEuMzQ2IDE3NiAyNTYgMTc2WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K">
-
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Музыкальный плеер">
-    <meta name="twitter:description" content="Современный музыкальный плеер с поддержкой фонового режима">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
@@ -285,18 +260,6 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-    </div>
-
-    <!-- Индикатор установки PWA -->
-    <div id="installPrompt" class="install-prompt">
-        <div class="install-prompt-text">
-            <strong>Установить приложение?</strong><br>
-            Добавьте плеер на главный экран для быстрого доступа
-        </div>
-        <button id="installButton" class="install-prompt-button">Установить</button>
-        <button id="installClose" class="install-prompt-close">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
 
     <script src="script.js"></script>

@@ -10,31 +10,27 @@
   "categories": ["music", "entertainment"],
   "lang": "ru",
   "scope": "/",
+  "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0zNiAxOEMyNy4xNjM0IDE4IDIwIDI1LjE2MzQgMjAgMzRWMzhDMjAgNDYuODM2NiAyNy4xNjM0IDU0IDM2IDU0QzQ0LjgzNjYgNTQgNTIgNDYuODM2NiA1MiAzOFYzNEM1MiAyNS4xNjM0IDQ0LjgzNjYgMTggMzYgMThaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik0zNiAyNEMzMC40NzcyIDI0IDI2IDI4LjQ3NzIgMjYgMzRWMzhDMjYgNDMuNTIyOCAzMC40NzcyIDQ4IDM2IDQ4QzQxLjUyMjggNDggNDYgNDMuNTIyOCA0NiAzOFYzNEM0NiAyOC40NzcyIDQxLjUyMjggMjQgMzYgMjRaIiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=",
-      "sizes": "72x72",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik00OCAyNEMzNi45NTQzIDI0IDI4IDMyLjk1NDMgMjggNDRWNTJDMjggNjMuMDQ1NyAzNi45NTQzIDcyIDQ4IDcyQzU5LjA0NTcgNzIgNjggNjMuMDQ1NyA2OCA1MlY0NEM2OCAzMi45NTQzIDU5LjA0NTcgMjQgNDggMjRaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik00OCAzMkM0MS4zNzI2IDMyIDM2IDM3LjM3MjYgMzYgNDRWNTJDMzYgNTguNjI3NCA0MS4zNzI2IDY0IDQ4IDY0QzU0LjYyNzQgNjQgNjAgNTguNjI3NCA2MCA1MlY0NEM2MCAzNy4zNzI2IDU0LjYyNzQgMzIgNDggMzJaIiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=",
-      "sizes": "96x96",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0IiBoZWlnaHQ9IjE0NCIgdmlld0JveD0iMCAwIDE0NCAxNDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNDQiIGhlaWdodD0iMTQ0IiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik03MiAzNkM1NS40MzE1IDM2IDQyIDQ5LjQzMTUgNDIgNjZWNzhDNDIgOTQuNTY4NSA1NS40MzE1IDEwOCA3MiAxMDhDODguNTY4NSAxMDggMTAyIDk0LjU2ODUgMTAyIDc4VjY2QzEwMiA0OS40MzE1IDg4LjU2ODUgMzYgNzIgMzZaIiBmaWxsPSIjRkZGRkZGIi8+CjxwYXRoIGQ9Ik03MiA0OEM2Mi4wNTg5IDQ4IDU0IDU2LjA1ODkgNTQgNjZWNzhDNTQgODcuOTQxMSA2Mi4wNTg5IDk2IDcyIDk2QzgxLjk0MTEgOTYgOTAgODcuOTQxMSA5MCA3OFY2NkM5MCA1Ni4wNTg5IDgxLjk0MTEgNDggNzIgNDhaIiBmaWxsPSIjMDAwMDAwIi8+Cjwvc3ZnPgo=",
-      "sizes": "144x144",
-      "type": "image/svg+xml"
-    },
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik05NiA0OEM3My45MDg2IDQ4IDU2IDY1LjkwODYgNTYgODhWMTA0QzU2IDEyNi4wOTEgNzMuOTA4NiAxNDQgOTYgMTQ0QzExOC4wOTEgMTQ0IDEzNiAxMjYuMDkxIDEzNiAxMDRWODhDMTM2IDY1LjkwODYgMTE4LjA5MSA0OCA5NiA0OFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTk2IDY0QzgyLjc0NTIgNjQgNzIgNzQuNzQ1MiA3MiA4OFYxMDRDNzIgMTE3LjI1NSA4Mi43NDUyIDEyOCA5NiAxMjhDMTA5LjI1NSAxMjggMTIwIDExNy4yNTUgMTIwIDEwNFY4OEMxMjAgNzQuNzQ1MiAxMDkuMjU1IDY0IDk2IDY0WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     },
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0yNTYgMTI4QzE5Ny42NTcgMTI4IDE1MiAxNzMuNjU3IDE1MiAyMzJWMjgwQzE1MiAzMzguMzQzIDE5Ny42NTcgMzg0IDI1NiAzODRDMzE0LjM0MyAzODQgMzYwIDMzOC4zNDMgMzYwIDI4MFYyMzJDMzYwIDE3My42NTcgMzE0LjM0MyAxMjggMjU2IDEyOFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTI1NiAxNzZDMjIwLjY1NCAxNzYgMTkyIDE5OC42NTQgMTkyIDIzMlYyODBDMTkyIDMxMy4zNDYgMjIwLjY1NCAzNDQgMjU2IDM0NEMyOTEuMzQ2IDM0NCAzMjAgMzEzLjM0NiAzMjAgMjgwVjIzMkMzMjAgMTk4LjY1NCAyOTEuMzQ2IDE3NiAyNTYgMTc2WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/placeholder.svg?height=640&width=360",
+      "sizes": "360x640",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
     }
   ],
   "shortcuts": [
@@ -43,20 +39,16 @@
       "short_name": "Play/Pause",
       "description": "Переключить воспроизведение",
       "url": "/?action=toggle",
-      "icons": [
-        {
-          "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2IiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik0zNiAyNFY3Mkw3MiA0OEwzNiAyNFoiIGZpbGw9IiNGRkZGRkYiLz4KPC9zdmc+Cg==",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/favicon.ico", "sizes": "96x96" }]
     }
   ],
-  "prefer_related_applications": false,
   "related_applications": [],
-  "protocol_handlers": [
+  "file_handlers": [
     {
-      "protocol": "web+music",
-      "url": "/?track=%s"
+      "action": "/",
+      "accept": {
+        "audio/*": [".mp3", ".wav", ".ogg", ".m4a", ".flac", ".webm"]
+      }
     }
   ]
 }

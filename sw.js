@@ -8,6 +8,7 @@ const urlsToCache = [
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
 ]
 
+// Глобальные переменные для отслеживания состояния
 let currentTrack = null
 let isPlaying = false
 let playbackPosition = 0
@@ -15,36 +16,20 @@ let playbackDuration = 0
 
 // Установка Service Worker
 self.addEventListener("install", (event) => {
-  console.log("Service Worker установлен")
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache)
-    }),
-  )
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)))
   self.skipWaiting()
 })
 
 // Активация Service Worker
 self.addEventListener("activate", (event) => {
-  console.log("Service Worker активирован")
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName)
-          }
-        }),
-      )
-    }),
-  )
-  self.clients.claim()
+  event.waitUntil(self.clients.claim())
 })
 
 // Обработка запросов
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
+      // Возвращаем кэшированную версию или загружаем из сети
       return response || fetch(event.request)
     }),
   )
@@ -68,19 +53,33 @@ self.addEventListener("message", (event) => {
     case "KEEP_ALIVE":
       // Поддерживаем Service Worker активным
       break
-    case "INIT_MEDIA_SESSION":
-      initializeMediaSession()
+    case "REGISTER_BACKGROUND_SYNC":
+      // Регистрируем фоновую синхронизацию
       break
   }
 })
 
-// Инициализация Media Session
-function initializeMediaSession() {
+// Обновление Media Session
+function updateMediaSession(trackData) {
   if ("mediaSession" in navigator) {
-    console.log("Инициализация Media Session")
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: trackData.title || "Неизвестный трек",
+      artist: trackData.artist || "Неизвестный исполнитель",
+      album: trackData.album || "Мой плейлист",
+      artwork: trackData.artwork
+        ? [
+            { src: trackData.artwork, sizes: "96x96", type: "image/jpeg" },
+            { src: trackData.artwork, sizes: "128x128", type: "image/jpeg" },
+            { src: trackData.artwork, sizes: "192x192", type: "image/jpeg" },
+            { src: trackData.artwork, sizes: "256x256", type: "image/jpeg" },
+            { src: trackData.artwork, sizes: "384x384", type: "image/jpeg" },
+            { src: trackData.artwork, sizes: "512x512", type: "image/jpeg" },
+          ]
+        : [{ src: "/favicon.ico", sizes: "192x192", type: "image/x-icon" }],
+    })
 
-    // Устанавливаем обработчики действий
-    const actionHandlers = [
+    // Устанавливаем все доступные обработчики действий
+    const actions = [
       ["play", () => sendMessageToClient({ type: "PLAY" })],
       ["pause", () => sendMessageToClient({ type: "PAUSE" })],
       ["previoustrack", () => sendMessageToClient({ type: "PREVIOUS" })],
@@ -112,42 +111,12 @@ function initializeMediaSession() {
       ],
     ]
 
-    for (const [action, handler] of actionHandlers) {
+    actions.forEach(([action, handler]) => {
       try {
         navigator.mediaSession.setActionHandler(action, handler)
-        console.log(`Установлен обработчик для ${action}`)
       } catch (error) {
-        console.log(`Действие ${action} не поддерживается:`, error)
+        console.log(`Действие ${action} не поддерживается`)
       }
-    }
-  }
-}
-
-// Обновление Media Session
-function updateMediaSession(trackData) {
-  if ("mediaSession" in navigator && trackData) {
-    console.log("Обновление Media Session:", trackData.title)
-
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: trackData.title || "Неизвестный трек",
-      artist: trackData.artist || "Неизвестный исполнитель",
-      album: trackData.album || "Мой плейлист",
-      artwork: trackData.artwork
-        ? [
-            { src: trackData.artwork, sizes: "96x96", type: "image/jpeg" },
-            { src: trackData.artwork, sizes: "128x128", type: "image/jpeg" },
-            { src: trackData.artwork, sizes: "192x192", type: "image/jpeg" },
-            { src: trackData.artwork, sizes: "256x256", type: "image/jpeg" },
-            { src: trackData.artwork, sizes: "384x384", type: "image/jpeg" },
-            { src: trackData.artwork, sizes: "512x512", type: "image/jpeg" },
-          ]
-        : [
-            {
-              src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+CjxwYXRoIGQ9Ik05NiA0OEM3My45MDg2IDQ4IDU2IDY1LjkwODYgNTYgODhWMTA0QzU2IDEyNi4wOTEgNzMuOTA4NiAxNDQgOTYgMTQ0QzExOC4wOTEgMTQ0IDEzNiAxMjYuMDkxIDEzNiAxMDRWODhDMTM2IDY1LjkwODYgMTE4LjA5MSA0OCA5NiA0OFoiIGZpbGw9IiNGRkZGRkYiLz4KPHBhdGggZD0iTTk2IDY0QzgyLjc0NTIgNjQgNzIgNzQuNzQ1MiA3MiA4OFYxMDRDNzIgMTE3LjI1NSA4Mi43NDUyIDEyOCA5NiAxMjhDMTA5LjI1NSAxMjggMTIwIDExNy4yNTUgMTIwIDEwNFY4OEMxMjAgNzQuNzQ1MiAxMDkuMjU1IDY0IDk2IDY0WiIgZmlsbD0iIzAwMDAwMCIvPgo8L3N2Zz4K",
-              sizes: "192x192",
-              type: "image/svg+xml",
-            },
-          ],
     })
   }
 }
@@ -156,12 +125,6 @@ function updateMediaSession(trackData) {
 function updatePlaybackState(stateData) {
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = stateData.isPlaying ? "playing" : "paused"
-
-    console.log("Обновление состояния воспроизведения:", {
-      isPlaying: stateData.isPlaying,
-      position: stateData.position,
-      duration: stateData.duration,
-    })
 
     if (stateData.position !== undefined && stateData.duration !== undefined && stateData.duration > 0) {
       try {
@@ -179,70 +142,50 @@ function updatePlaybackState(stateData) {
 
 // Отправка сообщения клиенту
 function sendMessageToClient(message) {
-  console.log("Отправка сообщения клиенту:", message)
-
   self.clients.matchAll({ includeUncontrolled: true, type: "window" }).then((clients) => {
     if (clients.length > 0) {
       clients.forEach((client) => {
         client.postMessage(message)
       })
-    } else {
-      // Если нет активных клиентов, открываем новое окно
-      self.clients.openWindow("/").then((client) => {
-        if (client) {
-          // Ждем загрузки и отправляем сообщение
-          setTimeout(() => {
-            client.postMessage(message)
-          }, 1000)
-        }
-      })
     }
   })
 }
 
-// Обработка закрытия уведомления
+// Поддержка фонового воспроизведения
 self.addEventListener("notificationclick", (event) => {
-  console.log("Клик по уведомлению")
   event.notification.close()
 
   event.waitUntil(
-    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
-      // Ищем открытую вкладку с плеером
-      for (const client of clients) {
-        if (client.url.includes(self.location.origin)) {
-          return client.focus()
-        }
+    self.clients.matchAll({ type: "window" }).then((clients) => {
+      if (clients.length > 0) {
+        return clients[0].focus()
       }
-      // Если нет открытых вкладок, открываем новую
       return self.clients.openWindow("/")
     }),
   )
 })
 
-// Обработка push-уведомлений (для будущего использования)
-self.addEventListener("push", (event) => {
-  console.log("Push уведомление получено")
-
-  if (event.data) {
-    const data = event.data.json()
-
-    event.waitUntil(
-      self.registration.showNotification(data.title || "Музыкальный плеер", {
-        body: data.body || "Новое уведомление",
-        icon: "/icon-192.png",
-        badge: "/icon-96.png",
-        tag: "music-player",
-        requireInteraction: false,
-        silent: true,
-      }),
-    )
+// Периодическая фоновая синхронизация (если поддерживается)
+self.addEventListener("sync", (event) => {
+  if (event.tag === "background-playback") {
+    event.waitUntil(maintainPlayback())
   }
 })
 
-// Поддержание активности Service Worker
-setInterval(() => {
-  console.log("Service Worker активен")
-}, 30000)
+function maintainPlayback() {
+  return self.clients.matchAll().then((clients) => {
+    if (clients.length > 0) {
+      clients[0].postMessage({ type: "MAINTAIN_PLAYBACK" })
+    }
+  })
+}
 
-// Инициализация при запуске
-initializeMediaSession()
+// Обработка push-уведомлений (для будущего использования)
+self.addEventListener("push", (event) => {
+  if (event.data) {
+    const data = event.data.json()
+    if (data.type === "PLAYBACK_CONTROL") {
+      sendMessageToClient(data.action)
+    }
+  }
+})
