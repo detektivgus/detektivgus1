@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Музыкальный Плеер</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="player-container">
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Секция визуализации -->
+            <div class="visualizer-section">
+                <canvas id="visualizer" class="visualizer-canvas"></canvas>
+                <div class="visualizer-overlay">
+                    <div class="current-track-large">
+                        <div id="trackTitleLarge" class="track-title-large">Выберите трек</div>
+                        <div id="trackArtistLarge" class="track-artist-large">для воспроизведения</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Боковая панель с треками -->
+            <div class="track-sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-controls">
+                        <button class="sidebar-btn active" id="tracksTab">
+                            <i class="fas fa-music"></i> Треки
+                        </button>
+                        <button class="sidebar-btn" id="addMusicBtn">
+                            <i class="fas fa-plus"></i> Добавить
+                        </button>
+                        <button class="sidebar-btn" id="exportBtn">
+                            <i class="fas fa-download"></i> Экспорт
+                        </button>
+                        <button class="sidebar-btn" id="importBtn">
+                            <i class="fas fa-upload"></i> Импорт
+                        </button>
+                    </div>
+                </div>
+                <div class="track-list" id="trackList">
+                    <div class="empty-state">
+                        <i class="fas fa-music"></i>
+                        <p>Перетащите музыкальные файлы сюда<br>или нажмите "Добавить"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель управления -->
+        <div class="player-controls">
+            <div class="current-track-info">
+                <div class="track-cover" id="currentCover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="track-details">
+                    <div class="track-title" id="currentTitle">Название трека</div>
+                    <div class="track-artist" id="currentArtist">Исполнитель</div>
+                </div>
+            </div>
+
+            <div class="playback-controls">
+                <button class="control-btn" id="shuffleBtn">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button class="control-btn" id="prevBtn">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn play-btn" id="playBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn" id="nextBtn">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                <button class="control-btn" id="repeatBtn">
+                    <i class="fas fa-repeat"></i>
+                </button>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <input type="range" class="progress-slider" id="progressSlider" min="0" max="100" value="0">
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">0:00</span>
+                    <span id="totalTime">0:00</span>
+                </div>
+            </div>
+
+            <div class="volume-controls">
+                <button class="control-btn" id="volumeBtn">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования трека -->
+    <div class="modal" id="editTrackModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Редактировать трек</h3>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-cover-section">
+                    <div class="cover-preview" id="coverPreview">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <button class="btn-change-cover" id="changeCoverBtn">Изменить обложку</button>
+                </div>
+                <div class="edit-fields">
+                    <input type="text" id="editTitle" placeholder="Название трека">
+                    <input type="text" id="editArtist" placeholder="Исполнитель">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelEditBtn">Отмена</button>
+                <button class="btn-save" id="saveEditBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрытые файловые инпуты -->
+    <input type="file" id="musicFileInput" multiple accept="audio/*" style="display: none;">
+    <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+    <!-- Аудио элемент -->
+    <audio id="audioPlayer" preload="metadata"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
